@@ -1,0 +1,28 @@
+/*清楚默认边距*/
+*{
+    margin: 0;
+    padding: 0;
+}
+/*消除a标签默认样式*/
+a{
+    /*取消下划线*/
+    text-decoration: none;
+    color: #101111;
+}
+/*版心第三部分*/
+.guide{
+    width: 100%;
+    height: 85px;
+    line-height: 85px;
+    text-align: center;
+    background: url("@/tit-line.png") no-repeat center center;
+    color: #444445;
+}
+
+
+
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
