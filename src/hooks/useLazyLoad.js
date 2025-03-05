@@ -1,9 +1,7 @@
 
 import { nextTick } from 'vue'
-// lazyload hook
 
 export const useLazyLoad = (element) => {
-
 
     nextTick(() => {
         const imageList = [...document.querySelectorAll(element)]
@@ -13,7 +11,6 @@ export const useLazyLoad = (element) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.src = entry.target.dataset.src
-                    // 图片加载后即停止监听该元素
                     observer.unobserve(entry.target)
                 }
             })

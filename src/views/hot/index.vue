@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang='ts'>
-import { ref, reactive, onMounted } from 'vue'
+import { reactive, onMounted } from 'vue'
 
 import { hotHotel } from '@/api/hot'
 import { useUserInfoStore } from '@/store/userInfo'
