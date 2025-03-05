@@ -20,6 +20,9 @@ importers:
       pinia-persistedstate-plugin:
         specifier: ^0.1.0
         version: 0.1.0(vue@3.5.13)
+      reset.css:
+        specifier: ^2.0.2
+        version: 2.0.2
       vue:
         specifier: ^3.5.13
         version: 3.5.13
@@ -1382,6 +1385,9 @@ packages:
   readdirp@4.1.2:
     resolution: {integrity: sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg==}
     engines: {node: '>= 14.18.0'}
+
+  reset.css@2.0.2:
+    resolution: {integrity: sha512-HG5RQLYcAxou3yw+Gnzwan1jJCbOcIBZjwoD/YLWuAd8kkuDI/ZqC0uRhY4ReKOOJaM1Y1kvwebHOwK4P8Sevg==}
 
   resolve-from@4.0.0:
     resolution: {integrity: sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==}
@@ -2915,6 +2921,8 @@ snapshots:
   punycode@2.3.1: {}
 
   readdirp@4.1.2: {}
+
+  reset.css@2.0.2: {}
 
   resolve-from@4.0.0: {}
 

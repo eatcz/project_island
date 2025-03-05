@@ -1,35 +1,39 @@
-# demo
+## 项目需求
 
-This template should help get you started developing with Vue 3 in Vite.
 
-## Recommended IDE Setup
+### 用户端
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+**登录功能**
 
-## Customize configuration
+- 
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+**查询功能**
 
-## Project Setup
+- 热门海岛页
 
-```sh
-npm install
-```
+- 分享(不清楚是页面还是类似弹窗形式)
 
-### Compile and Hot-Reload for Development
+- 推荐海岛页
 
-```sh
-npm run dev
-```
+    包含预约和私信等
 
-### Compile and Minify for Production
 
-```sh
-npm run build
-```
 
-### Lint with [ESLint](https://eslint.org/)
 
-```sh
-npm run lint
-```
+
+
+
+
+
+
+
+前端页面分用户端和管理员端
+用户端功能:登录,查询(可根据简介的关键字查询)海岛信息(简介,景点,酒店,美食,交通,)
+热门海岛(访问量前十的海岛信息),分享(要求图配文字),推荐(类似大众点评,就是看别人的分
+享),酒店预约,私信
+管理员端功能:增删改查海岛信息,处理酒店预约并信息回复用户,2张图表(一张显示用
+户搜索量排名前十的关键词和搜索次数,一张显示访问量前十的海岛和访问次数)
+算法要求:展示的海岛信息位置不固定,优先展示的是含有用户上次登录查询的关键词的海岛
+和浏览的推荐内容中涉及的海岛(类似淘宝和抖音)
+
+前端使用Vue框架，后端采用Spring Boot，数据库为MySQL。

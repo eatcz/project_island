@@ -41,6 +41,9 @@ export default {
         { id: 6, name: '地理环境', path: '/geo' },
         { id: 7, name: '游客留言板', path: '/messages' },
         { id: 8, name: '用户登录', path: '/user/userInfo' },
+        { id: 8, name: '热门', path: '/hot' },
+        { id: 8, name: '推荐', path: '/recommend' },
+        // { id: 8, name: '用户登录', path: '/user/userInfo' },
       ],
       temperature: '',
       city: ''
