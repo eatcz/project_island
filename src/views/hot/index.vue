@@ -26,6 +26,9 @@ import { ref, reactive, onMounted } from 'vue'
 
 import { hotHotel } from '@/api/hot'
 import { useUserInfoStore } from '@/store/userInfo'
+import { useLazyLoad } from '@/hooks/useLazyload'
+
+useLazyLoad('.lazy')
 const userInfoStore = useUserInfoStore()
 
 const list = reactive({
