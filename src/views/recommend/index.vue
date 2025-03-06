@@ -22,11 +22,10 @@
 </template>
 
 <script setup lang='ts'>
-import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { useLazyLoad } from '@/hooks/useLazyload'
+// import { useLazyLoad } from '@/hooks/useLazyload'
 const router = useRouter()
-useLazyLoad('.lazy')
+// useLazyLoad('.lazy')
 
 const imgList = [
     'https://www.shiguang.pro/skycaiji/data/images/0b/74428fcc7e37c6c3f273d86f810bb3.jpg',
