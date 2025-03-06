@@ -24,7 +24,7 @@
 <script setup lang='ts'>
 import { reactive, onMounted } from 'vue'
 
-import { hotHotel } from '@/api/hot'
+import { hotHotel, getHot } from '@/api/hot'
 import { useUserInfoStore } from '@/store/userInfo'
 import { useLazyLoad } from '@/hooks/useLazyload'
 
@@ -35,17 +35,17 @@ const list = reactive({
     data: []
 })
 
-const params = reactive({
-    userId: userInfoStore.info.userId,
-    current: 1,
-    size: 10
+// const params = reactive({
+//     userId: userInfoStore.info.userId,
+//     current: 1,
+//     size: 10
 
-})
+// })
 
 const getHotHotel = async () => {
-    const { code, data } = await hotHotel(params)
+    const { code, data } = await getHot()
     if (code === 0) {
-        list.data = data.records
+        list.data = data
     }
 }
 
@@ -69,24 +69,21 @@ onMounted(() => {
         // 列表
         .recommend_list {
             box-sizing: border-box;
-            display: grid;
-            grid-template-columns: repeat(3, minmax(340px, 1fr));
-            grid-template-rows: auto;
             gap: 20px;
-            // background-color: #17bebb;
+
         }
 
         // item
         .recommend_item {
-            // border-radius: 10px;
-            // overflow: hidden;
+            display: flex;
+            margin-bottom: 20px;
 
             // 图片容器
             .preview_img {
                 border-radius: 10px;
                 overflow: hidden;
                 // width: 100%;
-                height: 300px;
+                height: 200px;
                 margin-bottom: 10px;
             }
 

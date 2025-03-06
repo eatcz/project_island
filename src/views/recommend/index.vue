@@ -4,7 +4,7 @@
         <div class="recommend_content">
             <!-- 列表 -->
             <ul class="recommend_list">
-                <li class="recommend_item" v-for="item in imgList" :key="item">
+                <li class="recommend_item" v-for="item in imgList" :key="item" @click="handleViewDetail(item)">
                     <!-- 图片 -->
                     <div class="preview_img">
                         <img class="lazy" :data-src="item">
@@ -23,8 +23,9 @@
 
 <script setup lang='ts'>
 import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
 import { useLazyLoad } from '@/hooks/useLazyload'
-
+const router = useRouter()
 useLazyLoad('.lazy')
 
 const imgList = [
@@ -58,6 +59,10 @@ const imgList = [
     'https://www.shiguang.pro/skycaiji/data/images/0b/74428fcc7e37c6c3f273d86f810bb3.jpg',
 ]
 
+const handleViewDetail = () => {
+    router.push({ name: 'info', params: { id: 1 } })
+}
+
 </script>
 
 <style scoped lang='scss'>
@@ -84,6 +89,7 @@ const imgList = [
 
         // item
         .recommend_item {
+            cursor: pointer;
             // border-radius: 10px;
             // overflow: hidden;
 

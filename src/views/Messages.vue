@@ -65,7 +65,7 @@ const submitMessage = async () => {
   //  这里往下写调用后端的代码；
   const userInfo = useUserInfoStore();
   console.log(userInfo);
-  addMessageService({
+  await addMessageService({
     messageContent: message.value,
     username: userInfo.info.nickName
   })
