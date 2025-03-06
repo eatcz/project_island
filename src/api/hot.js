@@ -5,6 +5,16 @@ export const hotHotel = (params) => instance({
     params
 })
 
-export const getHot = () => instance({
-    url: '/information/infoAll'
+export const getHot = (params) => instance({
+    url: '/information/infoAll',
+    method: 'GET',
+    params
 })
+
+// 查看详情
+export const getHotDetail = (params) => instance({
+    url: '/information/infoPidAll',
+    method: 'GET',
+    params
+})
+

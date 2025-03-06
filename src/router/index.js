@@ -99,6 +99,11 @@ const routes = [
     name: 'hot',
     component: () => import('@/views/hot/index.vue')
   },
+  {
+    path: '/center',
+    name: 'center',
+    component: () => import('@/views/center/index.vue')
+  }
 
 ]
 

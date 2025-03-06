@@ -11,7 +11,7 @@ import SearchBar from './components/SearchBar.vue';
 <template>
   <DefaultHeader />
   <div class="view_container">
-    <SearchBar />
+    <!-- <SearchBar /> -->
     <router-view></router-view>
   </div>
   <HomeFooter />

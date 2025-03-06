@@ -12,6 +12,7 @@ export default [
     ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**'],
   },
 
+
   js.configs.recommended,
   ...pluginVue.configs['flat/essential'],
 ]
