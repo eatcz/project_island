@@ -1,9 +1,16 @@
 <template>
     <div class="center">
         <div class="side">
-
+            <el-menu default-active="1" class="el-menu-vertical-demo" background-color="transparent" text-color="#fff"
+                router>
+                <el-menu-item index="/center/chat">
+                    <span>私信</span>
+                </el-menu-item>
+            </el-menu>
         </div>
-        <div class="content"></div>
+        <div class="content">
+            <router-view></router-view>
+        </div>
     </div>
 </template>
 
@@ -13,12 +20,19 @@ import { ref, reactive } from 'vue'
 
 <style scoped lang='scss'>
 .center {
+    box-sizing: border-box;
+    display: flex;
+    width: 100%;
     padding: 0 20px;
 
     .side {
         width: 200px;
         height: 600px;
-        background-color: #409eff;
+        background-color: #fff;
+    }
+
+    .content {
+        flex: auto;
     }
 }
 </style>

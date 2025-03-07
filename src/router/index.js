@@ -102,7 +102,14 @@ const routes = [
   {
     path: '/center',
     name: 'center',
-    component: () => import('@/views/center/index.vue')
+    component: () => import('@/views/center/index.vue'),
+    children: [
+      {
+        path: 'chat',
+        name: 'chat',
+        component: () => import('@/views/chat/index.vue')
+      }
+    ]
   }
 
 ]
