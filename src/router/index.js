@@ -105,9 +105,14 @@ const routes = [
     component: () => import('@/views/center/index.vue'),
     children: [
       {
-        path: 'chat',
-        name: 'chat',
-        component: () => import('@/views/chat/index.vue')
+        path: 'share',
+        name: 'share',
+        component: () => import('@/views/share/index.vue')
+      },
+      {
+        path: 'subscribe',
+        name: 'subsscsribe',
+        component: () => import('@/views/subscribe/index.vue')
       }
     ]
   }

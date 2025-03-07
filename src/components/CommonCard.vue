@@ -44,13 +44,15 @@
 
                     <!-- 预约 -->
                     <div class="subscribe">
-                        <el-button type="primary" @click="showInfo(item)">{{ text }}</el-button>
+                        <el-button type="primary" v-show="item.type != '美食'"
+                            @click="handleSubscribe(item)">预约</el-button>
+                        <el-button type="primary" @click="handleShare(item)">分享</el-button>
                     </div>
                 </div>
 
-                <!-- 预约 -->
+
                 <div class="subscribe island" v-else>
-                    <el-button type="primary" @click="showInfo(item)">{{ text }}</el-button>
+                    <el-button type="primary" @click="handleInfo(item)">查看详情</el-button>
                 </div>
 
             </div>
@@ -61,12 +63,20 @@
 <script setup lang='ts'>
 import { BASE_URL } from '@/config'
 
-const { data, text, type } = defineProps(['data', 'text', 'type'])
+const { data, type } = defineProps(['data', 'text', 'type'])
 
-const emit = defineEmits(['showInfo'])
+const emit = defineEmits(['showInfo', 'subscribe', 'share'])
 
-// 查看详情
-const showInfo = (item) => {
+// 预约
+const handleSubscribe = (item) => {
+    emit('subscribe', item)
+}
+
+const handleShare = (item) => {
+    emit('share', item)
+}
+
+const handleInfo = (item) => {
     emit('showInfo', item)
 }
 </script>
