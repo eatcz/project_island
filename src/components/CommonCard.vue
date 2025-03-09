@@ -90,7 +90,6 @@ const filterPhoto = (photoStr) => {
     box-sizing: border-box;
     gap: 20px;
 
-    // item
     .recommend_item {
         display: flex;
         padding: 20px;

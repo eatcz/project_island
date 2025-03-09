@@ -147,18 +147,6 @@ const handleSearch = _.debounce(async () => {
     await hotStore.loadInfoData({ pid: route.query.pid, introduction: keyword.value })
     list.data = hotStore.infoList.data
 }, 1000)
-// {
-//     if (keyword.value !== '') {
-//         await hotStore.loadInfoData({ pid: route.query.pid, introduction: keyword.value })
-//         resultList.value = hotStore.infoList.data
-//         list.data = hotStore.infoList.data
-//     } else {
-//         nextTick(() => {
-//             resultList.value = []
-//             initData()
-//         })
-//     }
-// }
 
 const list = reactive({
     data: []
