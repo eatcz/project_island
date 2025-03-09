@@ -2,11 +2,11 @@
     <div class="sub_container">
         <el-card>
             <ul class="infinite-list" style="overflow: auto">
-                <li v-for="item in subscribeList" :key="item.id" class="infinite-list-item">
-                    <p>酒店名称:{{ item.name }}</p>
-                    <p>预约开始时间:{{ dayjs(item.startTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
-                    <p>预约结束时间:{{ dayjs(item.endTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
-                    <p>预约状态:{{ item.flag }}</p>
+                <li v-for="item in shareList" :key="item.id" class="infinite-list-item">
+                    <p>名称:{{ item.information.name }}</p>
+                    <p>类型:{{ item.information.type }}</p>
+                    <p>私信内容:{{ item.remark }}</p>
+                    <p>创建时间:{{ dayjs(item.createTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
                 </li>
             </ul>
         </el-card>
@@ -16,17 +16,17 @@
 <script setup lang='ts'>
 import { ref, onMounted } from 'vue'
 import dayjs from 'dayjs';
-import { getSubHotel } from '@/api/hotel';
+import { getMessages } from '@/api/info';
 import { useUserInfoStore } from '@/store/userInfo';
 const userInfoStore = useUserInfoStore()
 
-const subscribeList = ref([])
+const shareList = ref([])
 
 const getSubscribe = async () => {
-    const res = await getSubHotel({ userId: userInfoStore.info.userId })
-    console.log(res)
+    const res = await getMessages({ userId: userInfoStore.info.userId })
+
     if (res.code == 0) {
-        subscribeList.value = res.data.records
+        shareList.value = res.data.records
     }
 }
 

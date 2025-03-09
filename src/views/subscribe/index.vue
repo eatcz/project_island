@@ -3,10 +3,11 @@
         <el-card>
             <ul class="infinite-list" style="overflow: auto">
                 <li v-for="item in subscribeList" :key="item.id" class="infinite-list-item">
-                    <p>酒店名称:{{ item.name }}</p>
+                    <p>预约酒店名称:{{ item.name }}</p>
+                    <p>预约房型:{{ item.flag }}</p>
                     <p>预约开始时间:{{ dayjs(item.startTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
                     <p>预约结束时间:{{ dayjs(item.endTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
-                    <p>预约状态:{{ item.flag }}</p>
+
                 </li>
             </ul>
         </el-card>

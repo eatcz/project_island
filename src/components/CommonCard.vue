@@ -7,7 +7,13 @@
                 <h3 v-show="item.type == '美食'" style="font-weight: bold;font-size: 18px;margin-bottom: 10px;">{{
                     item.name }}</h3>
                 <div class="preview_img">
-                    <img :src="BASE_URL + item.photosPath">
+                    <el-carousel height="180px" :indicator-position="'none'">
+                        <el-carousel-item v-for="path in filterPhoto(item.photosPath)" :key="path">
+                            <img :src="BASE_URL + path" />
+                        </el-carousel-item>
+                    </el-carousel>
+                    <!-- <img :src="BASE_URL + item.photosPath"> -->
+
                 </div>
             </div>
 
@@ -44,7 +50,7 @@
 
                     <!-- 价格 -->
                     <div class="room_price">
-                        <p class="price">￥{{ item.cost }}</p>
+                        <p class="price">{{ item.cost == 0 ? '免费' : '￥' + item.cost + '元' }}</p>
                     </div>
 
                     <!-- 预约 -->
@@ -52,6 +58,7 @@
                         <el-button type="primary" v-show="item.type != '美食'"
                             @click="handleSubscribe(item)">预约</el-button>
                         <el-button type="primary" @click="handleShare(item)">分享</el-button>
+                        <el-button type="primary" @click="handleSend(item)">私信</el-button>
                     </div>
                 </div>
 
@@ -67,10 +74,9 @@
 
 <script setup lang='ts'>
 import { BASE_URL } from '@/config'
-
 const { data, type } = defineProps(['data', 'text', 'type'])
 
-const emit = defineEmits(['showInfo', 'subscribe', 'share'])
+const emit = defineEmits(['showInfo', 'subscribe', 'share', 'send'])
 
 // 预约
 const handleSubscribe = (item) => {
@@ -83,6 +89,16 @@ const handleShare = (item) => {
 
 const handleInfo = (item) => {
     emit('showInfo', item)
+}
+
+const handleSend = (item) => {
+    emit('send', item)
+}
+
+const filterPhoto = (photoStr) => {
+    if (photoStr != null) {
+        return photoStr.split(',')
+    }
 }
 </script>
 
@@ -109,6 +125,7 @@ const handleInfo = (item) => {
             height: 180px;
             margin-bottom: 10px;
             margin-right: 10px;
+
         }
 
         .item_info {

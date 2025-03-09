@@ -31,7 +31,7 @@
 
 <script setup lang='ts'>
 import { ref, reactive, onMounted, nextTick } from 'vue'
-
+import _ from 'lodash'
 import { getHot } from '@/api/hot'
 import { useUserInfoStore } from '@/store/userInfo'
 // import { useLazyLoad } from '@/hooks/useLazyload'
@@ -39,25 +39,34 @@ import CommonCard from '@/components/CommonCard.vue'
 import { useRouter } from 'vue-router'
 import { Search } from '@element-plus/icons-vue'
 import { useHotStore } from '@/store/hot'
+
 const hotStore = useHotStore();
 const router = useRouter()
 // useLazyLoad('.lazy')
 const userInfoStore = useUserInfoStore()
 
-const keyword = ref('')
+const keyword = ref(null)
 
 const resultList = ref([])
 
-const handleSearch = async () => {
-    if (keyword.value !== '') {
-        await hotStore.loadHotData({ introduction: keyword.value })
-        resultList.value = hotStore.hotList.data
-    } else {
-        nextTick(() => {
-            resultList.value = []
-        })
-    }
-}
+const handleSearch = _.debounce(async () => {
+    await hotStore.loadHotData({ introduction: keyword.value })
+    resultList.value = hotStore.hotList.data
+}, 1000)
+
+// if (keyword.value !== '') {
+
+//     _.debounce(async () => {
+//         console.log(123)
+//         await hotStore.loadHotData({ introduction: keyword.value })
+//         resultList.value = hotStore.hotList.data
+//     }, 1000)
+// } else {
+//     nextTick(() => {
+//         resultList.value = []
+//     })
+// }
+
 
 
 const list = reactive({

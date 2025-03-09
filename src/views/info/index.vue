@@ -7,28 +7,27 @@
                 <el-input v-model="keyword" size="large" placeholder="搜索内容" :prefix-icon="Search"
                     @input="handleSearch" />
             </div>
-            <div class="search_result">
+            <!-- <div class="search_result">
 
                 <el-card class="box-card" v-if="resultList.length > 0">
                     <div class="card-header" v-for="item in resultList" :key="item.id">
-                        <!-- <span>{{ item.name }}</span> -->
-                        <router-link to="">{{ item.name }}</router-link>
+                        <router-link @click="handleSearch()">{{ item.name }}</router-link>
                     </div>
                 </el-card>
 
-            </div>
+            </div> -->
         </div>
 
         <!-- 内容 -->
         <div class="recommend_content">
             <!-- 列表 -->
-            <CommonCard :data="list.data" type="info" @showInfo="handleShowInfo" @subscribe="handleSubscribe"
-                @share="handleShare" />
+            <CommonCard :data="list.data" type="info" @subscribe="handleShowSubscribe" @share="handleShowShare"
+                @send="handleShowSend" />
         </div>
     </div>
 
     <!-- 预约弹窗 -->
-    <el-dialog v-model="dialogSubVisible" title="预约" width="500" @before-close="handleClose">
+    <el-dialog v-model="dialogSubVisible" title="预约" width="500" @before-close="handleClose" @closed="handleClose">
         <el-form :model="subForm" label-position="right" label-width="auto">
             <el-form-item label="姓名">
                 <el-input v-model="subForm.username" autocomplete="off" disabled />
@@ -36,9 +35,9 @@
             <el-form-item label="酒店名称" props="name">
                 <el-input v-model="subForm.name" disabled />
             </el-form-item>
-            <el-form-item label="是否付款">
+            <el-form-item label="房型">
                 <el-select v-model="subForm.flag">
-                    <el-option v-for="(item, index) in ISPAY" :key="index" :label="item" :value="item" />
+                    <el-option v-for="(item, index) in ROOM_TYPE" :key="index" :label="item" :value="item" />
                 </el-select>
             </el-form-item>
             <el-form-item label="开始时间" props="time">
@@ -82,15 +81,21 @@
                 <div class="rooms">
                     <!-- 价格 -->
                     <div class="room_price">
-                        <p class="price">￥{{ proInfo.data.cost }}</p>
+                        <p class="price">{{ proInfo.data.cost == 0 ? '免费' : '￥' + proInfo.data.cost + '元' }}</p>
                     </div>
                 </div>
                 <div class="select">
                     <el-form label-position="right" label-width="auto" style="max-width: 300px">
+
                         <el-form-item label="选择分享用户">
-                            <el-select>
-                                <el-option></el-option>
+                            <el-select v-model="messageInfo.data.sendId">
+                                <el-option v-for="item in userList.data" :key="item.userId" :label="item.nickName"
+                                    :value="item.userId" />
                             </el-select>
+                        </el-form-item>
+
+                        <el-form-item label="留言" style="margin-top: 10px;">
+                            <el-input type="textarea" v-model="messageInfo.data.remark" placeholder="留言" />
                         </el-form-item>
                     </el-form>
                 </div>
@@ -98,8 +103,26 @@
         </div>
         <template #footer>
             <div class="dialog-footer">
-                <el-button type="primary" @click="dialogShareVisible = false">
+                <el-button type="primary" @click="sendMessage(1)">
                     分享
+                </el-button>
+            </div>
+        </template>
+    </el-dialog>
+
+    <!-- 私信弹窗 -->
+    <el-dialog v-model="dialogSendVisible" width="800" @closed="handleClose">
+        <el-card>
+            <template #header>
+                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+            </template>
+
+            <el-input type="textarea" v-model="messageInfo.data.remark" placeholder="输入私信" />
+        </el-card>
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button type="primary" @click="sendMessage">
+                    发送
                 </el-button>
             </div>
         </template>
@@ -107,62 +130,54 @@
 
 </template>
 
-<script setup lang='ts'>
+<script setup>
 import { ref, reactive, onMounted, nextTick } from 'vue'
 
 import { getHot, getHotDetail } from '@/api/hot'
 import { useUserInfoStore } from '@/store/userInfo'
-// import { useLazyLoad } from '@/hooks/useLazyload'
+import _ from 'lodash'
 import CommonCard from '@/components/CommonCard.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { Search } from '@element-plus/icons-vue'
 import { useHotStore } from '@/store/hot'
 import { BASE_URL } from '@/config'
 import { subHotel } from '@/api/hotel'
+import { ElMessage } from 'element-plus'
+import { sendMessages, getUser } from '@/api/info'
 const hotStore = useHotStore();
 const route = useRoute()
 
 const userInfoStore = useUserInfoStore()
 
 
-const keyword = ref('')
+const keyword = ref(null)
 
-const resultList = ref([])
-
-const handleSearch = async () => {
-    if (keyword.value !== '') {
-        await hotStore.loadInfoData({ pid: route.query.pid, introduction: keyword.value })
-        resultList.value = hotStore.infoList.data
-    } else {
-        nextTick(() => {
-            resultList.value = []
-        })
-    }
-}
+const handleSearch = _.debounce(async () => {
+    await hotStore.loadInfoData({ pid: route.query.pid, introduction: keyword.value })
+    list.data = hotStore.infoList.data
+}, 1000)
+// {
+//     if (keyword.value !== '') {
+//         await hotStore.loadInfoData({ pid: route.query.pid, introduction: keyword.value })
+//         resultList.value = hotStore.infoList.data
+//         list.data = hotStore.infoList.data
+//     } else {
+//         nextTick(() => {
+//             resultList.value = []
+//             initData()
+//         })
+//     }
+// }
 
 const list = reactive({
     data: []
 })
 
-const params = reactive({
-    userId: userInfoStore.info.userId,
-})
-
 const initData = async () => {
-    // console.log(route.query)
     const res = await getHotDetail({ pid: route.query.pid })
     if (res.code == 0) {
         list.data = res.data.records
     }
-    console.log(res)
-}
-
-// 查看详情
-const handleShowInfo = async () => {
-    // const res = await getHotDetail({ pid: row.id })
-    // console.log(res)
-    console.log(route.params)
-
 }
 
 // 预约
@@ -173,17 +188,16 @@ const subForm = reactive({
     userId: userInfoStore.info.userId,
     username: userInfoStore.info.nickName,
     name: '',
-    flag: '未支付',
+    flag: '',
     startTime: '',
     endTime: '',
     informationId: route.query.pid,
 })
 
-const ISPAY = ['已支付', '未支付']
+const ROOM_TYPE = ['单床房', '双床房', '大床房']
 
-const handleSubscribe = (row) => {
+const handleShowSubscribe = (row) => {
     dialogSubVisible.value = true
-    console.log(row)
     subForm.id = row.id
     subForm.name = row.name
 }
@@ -191,18 +205,74 @@ const handleSubscribe = (row) => {
 // 提交预约
 const submitSubscribe = async () => {
     const res = await subHotel(subForm)
-    console.log(res)
+    if (res.code == 0) {
+        ElMessage.success('预约成功')
+        dialogSubVisible.value = false
+        subForm.startTime = ''
+        subForm.endTime = ''
+        subForm.flag = ''
+        subForm.informationId = ''
+        subForm.name = ''
+    }
 }
+
+
+
 
 // 分享
 const dialogShareVisible = ref(false)
 
 const proInfo = reactive({ data: {} })
 
-const handleShare = (row) => {
+const userList = reactive({ data: [] })
+
+const messageInfo = reactive({
+    data: {
+        userId: userInfoStore.info.userId,
+        username: userInfoStore.info.nickName,
+        informationId: '',
+        remark: '',
+        createBy: userInfoStore.info.nickName,
+        createTime: new Date(),
+        sendId: 1
+    }
+})
+
+const handleShowShare = (row) => {
     proInfo.data = row
+    messageInfo.data.informationId = row.id
     dialogShareVisible.value = true
-    console.log(row)
+}
+
+const getShareUser = async () => {
+    const res = await getUser()
+    if (res.code == 200) {
+        userList.data = res.data
+    }
+}
+
+// 私信
+const dialogSendVisible = ref(false)
+
+const handleShowSend = (row) => {
+    messageInfo.data.informationId = row.id
+    dialogSendVisible.value = true
+}
+
+const sendMessage = async (type) => {
+    const res = await sendMessages(messageInfo.data)
+    if (res.code == 0) {
+        if (type == 1) {
+            ElMessage.success('已分享')
+        } else {
+            ElMessage.success('已发送私信')
+        }
+
+        dialogSendVisible.value = false
+        dialogShareVisible.value = false
+        messageInfo.data.sendId = 1
+        messageInfo.data.remark = ''
+    }
 }
 
 // 关闭弹窗
@@ -212,10 +282,12 @@ const handleClose = () => {
     subForm.startTime = ''
     subForm.endTime = ''
     subForm.flag = ''
+    messageInfo.data.remark = ''
 }
 
 onMounted(() => {
     initData()
+    getShareUser()
 })
 </script>
 
