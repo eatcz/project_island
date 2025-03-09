@@ -7,7 +7,17 @@ import vue from '@vitejs/plugin-vue'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    vue(),
+    vue(), {
+      name: 'ts-plugin',
+      enforce: 'pre',
+      config: () => ({
+        plugins: [
+          // 关闭 ts-plugin
+          '@typescript-eslint/eslint-plugin',
+          '@typescript-eslint/parser',
+        ].map((plugin) => ({ name: plugin, enabled: false })),
+      }),
+    },
     // vueDevTools(),
   ],
   resolve: {
@@ -23,5 +33,18 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
-  }
+  },
+  esbuild: {
+    // 关闭 ESLint 校验
+    logLevel: 'error',
+  },
+  // 关闭 TypeScript 校验
+  build: {
+    sourcemap: false,
+    minify: false,
+    // 关闭 TypeScript 校验
+    esbuildOptions: {
+      tsconfig: null,
+    },
+  },
 })

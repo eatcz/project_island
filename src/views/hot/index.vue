@@ -12,7 +12,8 @@
                 <el-card class="box-card" v-if="resultList.length > 0">
                     <div class="card-header" v-for="item in resultList" :key="item.id">
                         <!-- <span>{{ item.name }}</span> -->
-                        <router-link to="">{{ item.name }}</router-link>
+                        <router-link :to="`/info?pid=${item.id}&introduction=${item.introduction}`">{{ item.name
+                            }}</router-link>
                     </div>
                 </el-card>
 

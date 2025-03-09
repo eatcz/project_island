@@ -72,9 +72,9 @@ const login = async () => {
     //把得到的token存储到pinia中
     tokenStore.setToken(result.data.token)
     console.log(tokenStore.token)
+    await getUserInfo()
     //跳转到首页 路由完成跳转
     router.push('/')
-    getUserInfo()
 }
 
 

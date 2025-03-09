@@ -2,14 +2,37 @@
     <div class="sub_container">
         <el-card>
             <ul class="infinite-list" style="overflow: auto">
-                <li v-for="i in 60" :key="i" class="infinite-list-item">{{ i }}</li>
+                <li v-for="item in subscribeList" :key="item.id" class="infinite-list-item">
+                    <p>酒店名称:{{ item.name }}</p>
+                    <p>预约开始时间:{{ dayjs(item.startTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
+                    <p>预约结束时间:{{ dayjs(item.endTime).format('YYYY-MM-DD HH:mm:ss') }}</p>
+                    <p>预约状态:{{ item.flag }}</p>
+                </li>
             </ul>
         </el-card>
     </div>
 </template>
 
 <script setup lang='ts'>
-import { ref, reactive } from 'vue'
+import { ref, onMounted } from 'vue'
+import dayjs from 'dayjs';
+import { getSubHotel } from '@/api/hotel';
+import { useUserInfoStore } from '@/store/userInfo';
+const userInfoStore = useUserInfoStore()
+
+const subscribeList = ref([])
+
+const getSubscribe = async () => {
+    const res = await getSubHotel({ userId: userInfoStore.info.userId })
+    console.log(res)
+    if (res.code == 0) {
+        subscribeList.value = res.data.records
+    }
+}
+
+onMounted(() => {
+    getSubscribe()
+})
 </script>
 
 <style scoped lang='scss'>
@@ -24,31 +47,27 @@ import { ref, reactive } from 'vue'
         margin: 0;
         list-style: none;
 
+        .infinite-list-item {
+            min-height: 100px;
+            background: var(--el-color-primary-light-9);
+            margin: 10px;
+            padding: 10px;
+            color: var(--el-color-primary);
+            text-align: center;
 
+            p {
+                margin-bottom: 20px;
+            }
+
+            &+.list-item {
+                margin-top: 10px;
+            }
+        }
     }
 
-    .infinite-list-item {
-        height: 80px;
-    }
 }
 
 .el-card {
     height: 100%;
-}
-</style>
-
-<style>
-.infinite-list .infinite-list-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 50px;
-    background: var(--el-color-primary-light-9);
-    margin: 10px;
-    color: var(--el-color-primary);
-}
-
-.infinite-list .infinite-list-item+.list-item {
-    margin-top: 10px;
 }
 </style>

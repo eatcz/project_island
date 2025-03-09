@@ -28,22 +28,32 @@
     </div>
 
     <!-- 预约弹窗 -->
-    <el-dialog v-model="dialogSubVisible" title="预约" width="500">
-        <el-form :model="subForm">
-            <el-form-item label="姓名" :label-width="80">
-                <el-input v-model="subForm.name" autocomplete="off" />
+    <el-dialog v-model="dialogSubVisible" title="预约" width="500" @before-close="handleClose">
+        <el-form :model="subForm" label-position="right" label-width="auto">
+            <el-form-item label="姓名">
+                <el-input v-model="subForm.username" autocomplete="off" disabled />
             </el-form-item>
-            <el-form-item label="Zones" :label-width="80">
-                <el-select v-model="subForm.name" placeholder="联系电话">
-                    <el-option label="Zone No.1" value="shanghai" />
-                    <el-option label="Zone No.2" value="beijing" />
+            <el-form-item label="酒店名称" props="name">
+                <el-input v-model="subForm.name" disabled />
+            </el-form-item>
+            <el-form-item label="是否付款">
+                <el-select v-model="subForm.flag">
+                    <el-option v-for="(item, index) in ISPAY" :key="index" :label="item" :value="item" />
                 </el-select>
+            </el-form-item>
+            <el-form-item label="开始时间" props="time">
+                <el-date-picker v-model="subForm.startTime" type="datetime" format="YYYY-MM-DD HH:mm:ss"
+                    placeholder="开始时间" />
+            </el-form-item>
+            <el-form-item label="结束时间" props="time">
+                <el-date-picker v-model="subForm.endTime" type="datetime" format="YYYY-MM-DD HH:mm:ss"
+                    placeholder="结束时间" />
             </el-form-item>
         </el-form>
         <template #footer>
             <div class="dialog-footer">
-                <el-button @click="dialogSubVisible = false">关闭</el-button>
-                <el-button type="primary" @click="dialogSubVisible = false">
+                <el-button @click="handleClose">关闭</el-button>
+                <el-button type="primary" @click="submitSubscribe">
                     预约
                 </el-button>
             </div>
@@ -75,6 +85,15 @@
                         <p class="price">￥{{ proInfo.data.cost }}</p>
                     </div>
                 </div>
+                <div class="select">
+                    <el-form label-position="right" label-width="auto" style="max-width: 300px">
+                        <el-form-item label="选择分享用户">
+                            <el-select>
+                                <el-option></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-form>
+                </div>
             </div>
         </div>
         <template #footer>
@@ -99,6 +118,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { Search } from '@element-plus/icons-vue'
 import { useHotStore } from '@/store/hot'
 import { BASE_URL } from '@/config'
+import { subHotel } from '@/api/hotel'
 const hotStore = useHotStore();
 const route = useRoute()
 
@@ -148,11 +168,30 @@ const handleShowInfo = async () => {
 // 预约
 const dialogSubVisible = ref(false)
 
-const subForm = reactive({ name: '' })
+const subForm = reactive({
+    id: '',
+    userId: userInfoStore.info.userId,
+    username: userInfoStore.info.nickName,
+    name: '',
+    flag: '未支付',
+    startTime: '',
+    endTime: '',
+    informationId: route.query.pid,
+})
+
+const ISPAY = ['已支付', '未支付']
 
 const handleSubscribe = (row) => {
     dialogSubVisible.value = true
     console.log(row)
+    subForm.id = row.id
+    subForm.name = row.name
+}
+
+// 提交预约
+const submitSubscribe = async () => {
+    const res = await subHotel(subForm)
+    console.log(res)
 }
 
 // 分享
@@ -164,6 +203,15 @@ const handleShare = (row) => {
     proInfo.data = row
     dialogShareVisible.value = true
     console.log(row)
+}
+
+// 关闭弹窗
+const handleClose = () => {
+    dialogSubVisible.value = false
+    dialogShareVisible.value = false
+    subForm.startTime = ''
+    subForm.endTime = ''
+    subForm.flag = ''
 }
 
 onMounted(() => {

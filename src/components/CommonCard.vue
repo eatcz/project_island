@@ -3,12 +3,17 @@
     <ul class="recommend_list">
         <li class="recommend_item" v-for="item in data" :key="item.id">
             <!-- 图片 -->
-            <div class="preview_img">
-                <img :src="BASE_URL + item.photosPath">
+            <div class="food">
+                <h3 v-show="item.type == '美食'" style="font-weight: bold;font-size: 18px;margin-bottom: 10px;">{{
+                    item.name }}</h3>
+                <div class="preview_img">
+                    <img :src="BASE_URL + item.photosPath">
+                </div>
             </div>
+
             <!-- 描述 -->
             <div class="item_info">
-                <div class="title">{{ item.name }}</div>
+                <div class="title" v-show="item.type != '美食'">{{ item.name }}</div>
                 <!-- 简介 -->
                 <div class="des">
                     <!-- 评价 -->
@@ -19,7 +24,7 @@
 
                 </div>
 
-                <div class="rooms" v-if="type == 'info'">
+                <div class="rooms" :class="{ isFood: item.type == '美食' }" v-if="type == 'info'">
                     <!-- 名称 -->
                     <!-- <div class="room_header">
                         <div class="room_name">
@@ -204,6 +209,10 @@ const handleInfo = (item) => {
                 right: 10px;
             }
 
+        }
+
+        .isFood {
+            height: 150px;
         }
     }
 

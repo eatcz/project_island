@@ -15,7 +15,7 @@
     <!--        导航条-->
     <div class="navigation">
       <ul>
-        <li v-for="nav_item in navigation" :key="nav_item.id">
+        <li v-for="nav_item in filteredNavigation" :key="nav_item.id">
           <router-link :id="nav_item.id" :to="nav_item.path">{{ nav_item.name }}</router-link>
         </li>
       </ul>
@@ -26,6 +26,7 @@
 
 <script>
 import axios from "axios"
+import { useUserInfoStore } from "@/store/userInfo";
 
 export default {
   name: "DefaultHeader",
@@ -39,14 +40,27 @@ export default {
         // { id: 4, name: '特色小吃', path: '/food' },
         // { id: 5, name: '历史文化', path: '/history' },
         // { id: 6, name: '地理环境', path: '/geo' },
-        // { id: 7, name: '游客留言板', path: '/messages' },
+        { id: 7, name: '游客留言板', path: '/messages' },
         // { id: 8, name: '用户登录', path: '/user/userInfo' },
         { id: 8, name: '热门', path: '/hot' },
-        { id: 9, name: '我的', path: '/center' },
-        { id: 10, name: '用户登录', path: '/user/userInfo' },
+        // { id: 9, name: '我的', path: '/center' },
+        // { id: 10, name: '用户登录', path: '/user/userInfo' },
       ],
       temperature: '',
       city: ''
+    }
+  },
+  computed: {
+    filteredNavigation() {
+      const userInfoStore = useUserInfoStore();
+      const userIdExists = userInfoStore.info?.userId;
+      let navList = [...this.navigation];
+      if (userIdExists) {
+        navList.push({ id: 9, name: '我的', path: '/center' });
+      } else {
+        navList.push({ id: 10, name: '用户登录', path: '/user/userInfo' });
+      }
+      return navList;
     }
   },
   methods: {
