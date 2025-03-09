@@ -7,15 +7,6 @@
                 <el-input v-model="keyword" size="large" placeholder="搜索内容" :prefix-icon="Search"
                     @input="handleSearch" />
             </div>
-            <!-- <div class="search_result">
-
-                <el-card class="box-card" v-if="resultList.length > 0">
-                    <div class="card-header" v-for="item in resultList" :key="item.id">
-                        <router-link @click="handleSearch()">{{ item.name }}</router-link>
-                    </div>
-                </el-card>
-
-            </div> -->
         </div>
 
         <!-- 内容 -->

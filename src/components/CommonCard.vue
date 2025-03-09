@@ -12,7 +12,6 @@
                             <img :src="BASE_URL + path" />
                         </el-carousel-item>
                     </el-carousel>
-                    <!-- <img :src="BASE_URL + item.photosPath"> -->
 
                 </div>
             </div>
@@ -31,23 +30,6 @@
                 </div>
 
                 <div class="rooms" :class="{ isFood: item.type == '美食' }" v-if="type == 'info'">
-                    <!-- 名称 -->
-                    <!-- <div class="room_header">
-                        <div class="room_name">
-                            <span>如愿大床房</span>
-                        </div>
-                        <div class="tag">
-                            <span>门店首单</span>
-                            <span>白银贵宾价</span>
-                            <span>满减券</span>
-                        </div>
-                    </div> -->
-
-                    <!-- 取消时间 -->
-                    <!-- <div class="vaild_time">
-                        <p class="abolish">订单30分钟内可免费取消</p>
-                    </div> -->
-
                     <!-- 价格 -->
                     <div class="room_price">
                         <p class="price">{{ item.cost == 0 ? '免费' : '￥' + item.cost + '元' }}</p>
@@ -120,7 +102,6 @@ const filterPhoto = (photoStr) => {
         .preview_img {
             border-radius: 10px;
             overflow: hidden;
-            // width: 100%;
             width: 180px;
             height: 180px;
             margin-bottom: 10px;
