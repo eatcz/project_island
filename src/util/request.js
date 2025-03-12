@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const instance = axios.create({
     baseURL: 'http://9857731ku9.zicp.fun',
-    timeout: 5000
+    timeout: 15000
 })
 
 import { useTokenStore } from '@/store/token.js'

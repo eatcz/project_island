@@ -23,7 +23,7 @@
                 <div class="des">
                     <!-- 评价 -->
                     <div class="evaluate">
-                        <p class="remark">{{ item.grade }}分</p>
+                        <!-- <p class="remark" v-show="item.type != '景点'">{{ item.grade }}分</p> -->
                         <p class="remark_info">{{ item.introduction }}</p>
                     </div>
 
@@ -37,7 +37,7 @@
 
                     <!-- 预约 -->
                     <div class="subscribe">
-                        <el-button type="primary" v-show="item.type != '美食'"
+                        <el-button type="primary" v-show="item.type != '美食' && item.type != '交通'"
                             @click="handleSubscribe(item)">预约</el-button>
                         <el-button type="primary" @click="handleShare(item)">分享</el-button>
                         <el-button type="primary" @click="handleSend(item)">私信</el-button>
@@ -136,8 +136,8 @@ const filterPhoto = (photoStr) => {
                         -webkit-box-orient: vertical;
                         overflow: hidden;
                         text-overflow: ellipsis;
-                        line-clamp: 2;
-                        -webkit-line-clamp: 2
+                        line-clamp: 6;
+                        -webkit-line-clamp: 6
                     }
                 }
             }

@@ -4,7 +4,7 @@
         <!-- 搜索 -->
         <div class="search_container">
             <div class="search_wrapper">
-                <el-input v-model="keyword" size="large" placeholder="搜索内容" :prefix-icon="Search"
+                <el-input v-model="query.introduction" size="large" placeholder="搜索内容" :prefix-icon="Search"
                     @input="handleSearch" />
             </div>
             <div class="search_result">
@@ -13,7 +13,7 @@
                     <div class="card-header" v-for="item in resultList" :key="item.id">
                         <!-- <span>{{ item.name }}</span> -->
                         <router-link :to="`/info?pid=${item.id}&introduction=${item.introduction}`">{{ item.name
-                            }}</router-link>
+                        }}</router-link>
                     </div>
                 </el-card>
 
@@ -45,14 +45,16 @@ const router = useRouter()
 // useLazyLoad('.lazy')
 const userInfoStore = useUserInfoStore()
 
-const keyword = ref(null)
+const query = ref({
+    introduction: null
+})
 
 const resultList = ref([])
 
 const handleSearch = _.debounce(async () => {
-    await hotStore.loadHotData({ introduction: keyword.value })
+    await hotStore.loadHotData({ ...query.value })
     resultList.value = hotStore.hotList.data
-}, 1000)
+}, 500)
 
 // if (keyword.value !== '') {
 

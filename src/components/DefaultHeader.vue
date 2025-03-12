@@ -18,6 +18,7 @@
         <li v-for="nav_item in filteredNavigation" :key="nav_item.id">
           <router-link :id="nav_item.id" :to="nav_item.path">{{ nav_item.name }}</router-link>
         </li>
+        <li v-show="show" @click="loginOut"><a href="javascript:void(0)">退出登录</a></li>
       </ul>
     </div>
   </div>
@@ -27,6 +28,8 @@
 <script>
 import axios from "axios"
 import { useUserInfoStore } from "@/store/userInfo";
+import { useTokenStore } from "@/store/token";
+import router from '@/router'
 
 export default {
   name: "DefaultHeader",
@@ -47,7 +50,8 @@ export default {
         // { id: 10, name: '用户登录', path: '/user/userInfo' },
       ],
       temperature: '',
-      city: ''
+      city: '',
+      show: false
     }
   },
   computed: {
@@ -57,6 +61,7 @@ export default {
       let navList = [...this.navigation];
       if (userIdExists) {
         navList.push({ id: 9, name: '我的', path: '/center' });
+        this.show = true
       } else {
         navList.push({ id: 10, name: '用户登录', path: '/user/userInfo' });
       }
@@ -71,6 +76,15 @@ export default {
         this.temperature = res.data.lives[0].temperature
         this.city = res.data.lives[0].city
       })
+    },
+    loginOut() {
+      const tokenStore = useTokenStore();
+      const userInfoStore = useUserInfoStore();
+      this.show = false
+      userInfoStore.removeInfo()
+      tokenStore.removeToken()
+      router.push('/user/login')
+
     }
   },
   created() {

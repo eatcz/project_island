@@ -17,9 +17,9 @@ export const useUserStore = defineStore('user', () => {
     }
 
     // 退出登录
-    const logout = () => {
+    const loginout = () => {
         removeAccessToken()
     }
 
-    return { accessToken, userInfo, login, logout }
+    return { accessToken, userInfo, login, loginout }
 })

@@ -50,11 +50,16 @@
         </template>
     </el-dialog>
     <!-- 分享弹窗 -->
-    <el-dialog v-model="dialogShareVisible" width="800">
+    <el-dialog v-model="dialogShareVisible" width="800" @closed="handleClose">
         <div class="recommend_item">
             <!-- 图片 -->
             <div class="preview_img">
-                <img :src="BASE_URL + proInfo.data.photosPath">
+                <!-- <img :src="BASE_URL + proInfo.data.photosPath"> -->
+                <el-carousel height="180px" :indicator-position="'none'">
+                    <el-carousel-item v-for="path in filterPhoto(proInfo.data.photosPath)" :key="path">
+                        <img :src="BASE_URL + path" />
+                    </el-carousel-item>
+                </el-carousel>
             </div>
             <!-- 描述 -->
             <div class="item_info">
@@ -63,7 +68,7 @@
                 <div class="des">
                     <!-- 评价 -->
                     <div class="evaluate">
-                        <p class="remark">{{ proInfo.data.grade }}分</p>
+                        <!-- <p class="remark">{{ proInfo.data.grade }}分</p> -->
                         <p class="remark_info">{{ proInfo.data.introduction }}</p>
                     </div>
 
@@ -76,18 +81,26 @@
                     </div>
                 </div>
                 <div class="select">
-                    <el-form label-position="right" label-width="auto" style="max-width: 300px">
+                    <el-form label-position="right" label-width="auto" inline>
 
-                        <el-form-item label="选择分享用户">
-                            <el-select v-model="messageInfo.data.sendId">
-                                <el-option v-for="item in userList.data" :key="item.userId" :label="item.nickName"
-                                    :value="item.userId" />
-                            </el-select>
-                        </el-form-item>
+                        <el-row>
+                            <el-col :span="12">
+                                <el-form-item label="选择分享用户">
+                                    <el-select v-model="messageInfo.data.sendId">
+                                        <el-option v-for="item in userList.data" :key="item.userId"
+                                            :label="item.nickName" :value="item.userId" />
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item label="留言">
+                                    <el-input type="textarea" v-model="messageInfo.data.remark" placeholder="留言" />
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
 
-                        <el-form-item label="留言" style="margin-top: 10px;">
-                            <el-input type="textarea" v-model="messageInfo.data.remark" placeholder="留言" />
-                        </el-form-item>
+
+
                     </el-form>
                 </div>
             </div>
@@ -146,7 +159,7 @@ const keyword = ref(null)
 const handleSearch = _.debounce(async () => {
     await hotStore.loadInfoData({ pid: route.query.pid, introduction: keyword.value })
     list.data = hotStore.infoList.data
-}, 1000)
+}, 500)
 
 const list = reactive({
     data: []
@@ -163,21 +176,20 @@ const initData = async () => {
 const dialogSubVisible = ref(false)
 
 const subForm = reactive({
-    id: '',
     userId: userInfoStore.info.userId,
     username: userInfoStore.info.nickName,
     name: '',
     flag: '',
     startTime: '',
     endTime: '',
-    informationId: route.query.pid,
+    informationId: '',
 })
 
 const ROOM_TYPE = ['单床房', '双床房', '大床房']
 
 const handleShowSubscribe = (row) => {
     dialogSubVisible.value = true
-    subForm.id = row.id
+    subForm.informationId = row.id
     subForm.name = row.name
 }
 
@@ -264,6 +276,12 @@ const handleClose = () => {
     messageInfo.data.remark = ''
 }
 
+const filterPhoto = (photoStr) => {
+    if (photoStr != null) {
+        return photoStr.split(',')
+    }
+}
+
 onMounted(() => {
     initData()
     getShareUser()
@@ -334,7 +352,7 @@ onMounted(() => {
 
     .item_info {
         position: relative;
-        flex: auto;
+        flex: 1 1 0%;
 
         .title {
             font-weight: bold;
@@ -360,8 +378,8 @@ onMounted(() => {
                     -webkit-box-orient: vertical;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    line-clamp: 2;
-                    -webkit-line-clamp: 2
+                    line-clamp: 6;
+                    -webkit-line-clamp: 6
                 }
             }
         }
@@ -441,5 +459,9 @@ img {
 
 a {
     text-decoration: none;
+}
+
+.el-form-item {
+    width: 100%;
 }
 </style>
