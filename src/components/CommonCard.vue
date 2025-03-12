@@ -37,7 +37,7 @@
 
                     <!-- 预约 -->
                     <div class="subscribe">
-                        <el-button type="primary" v-show="item.type != '美食' && item.type != '交通'"
+                        <el-button type="primary" v-show="item.type == '酒店'"
                             @click="handleSubscribe(item)">预约</el-button>
                         <el-button type="primary" @click="handleShare(item)">分享</el-button>
                         <el-button type="primary" @click="handleSend(item)">私信</el-button>
