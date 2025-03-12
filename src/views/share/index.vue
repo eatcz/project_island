@@ -6,7 +6,9 @@
                     :key="item.id">
                     <div class="preview_img">
                         <el-carousel height="180px" :indicator-position="'none'">
-                            <el-carousel-item v-for="path in filterPhoto(item.information[0].photosPath)" :key="path">
+                            <el-carousel-item
+                                v-for="path in filterPhoto(item.information[0] && item.information[0].photosPath)"
+                                :key="path">
                                 <img :src="BASE_URL + path" />
                             </el-carousel-item>
                         </el-carousel>
@@ -14,7 +16,7 @@
                     <div class="item_info">
                         <p>发送人:{{ item.username }}</p>
                         <p>名称:{{ item.information[0] && item.information[0].name || '' }}</p>
-                        <p>类型:{{ item.information[0].type || '' }}</p>
+                        <p>类型:{{ item.information[0] && item.information[0].type || '' }}</p>
                         <p>私信内容:{{ item.remark || '' }}</p>
                         <p>创建时间:{{ dayjs(item.createTime).format('YYYY-MM-DD HH:mm:ss') || '' }}</p>
                     </div>
